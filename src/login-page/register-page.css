@@ -1,0 +1,74 @@
+/* Main container for registration page */
+.register-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    #a8edea 0%,
+    #fed6e3 100%
+  ); /* Gradient colors */
+}
+
+/* Centered box for registration form */
+.register-box {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.register-box h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #001529;
+}
+
+/* Description text */
+.register-description {
+  font-size: 14px;
+  color: #7b7b7b;
+  margin-bottom: 30px;
+}
+
+/* Form styling */
+.register-form {
+  width: 100%;
+}
+
+.ant-form-item-label > label {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Register button */
+.ant-btn-primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Redirect to login link */
+.redirect-login {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+/* Add responsiveness for mobile */
+@media (max-width: 600px) {
+  .register-box {
+    padding: 20px;
+  }
+
+  .register-box h2 {
+    font-size: 20px;
+  }
+}

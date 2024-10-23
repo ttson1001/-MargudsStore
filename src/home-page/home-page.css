@@ -1,0 +1,83 @@
+.custom-content {
+  padding: 20px; /* Add padding around the content */
+  background-color: #fff; /* Light background color */
+  font-family: Arial, sans-serif; /* Font family for the text */
+}
+
+.carousel-image {
+  width: 100%; /* Đảm bảo hình ảnh có chiều rộng 100% của phần tử cha */
+  height: 300px; /* Đặt chiều cao cố định */
+  border-radius: 8px; /* Bo góc hình ảnh */
+  object-fit: cover; /* Đảm bảo hình ảnh không bị kéo dãn */
+}
+
+h2 {
+  color: #333; /* Darker color for the main heading */
+  text-align: center; /* Center align */
+  margin-bottom: 20px; /* Bottom margin */
+}
+
+h3 {
+  color: #555; /* Slightly lighter color for category headings */
+  text-align: center; /* Center align */
+  margin: 20px 0; /* Margin for spacing */
+}
+
+.product-card {
+  transition: transform 0.3s, box-shadow 0.3s; /* Smooth transform and shadow */
+  border-radius: 10px; /* Rounded corners for cards */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  overflow: hidden; /* Prevent overflow of content */
+}
+
+.product-card:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.ant-card-cover img {
+  border-radius: 10px 10px 0 0; /* Round top corners of images */
+  width: 100%; /* Make images responsive */
+  height: 150px; /* Set a fixed height for uniformity */
+  object-fit: cover; /* Maintain aspect ratio without stretching */
+}
+
+.product-card .ant-card-meta-title {
+  font-size: 1.1em; /* Increase font size for title */
+  font-weight: bold; /* Bold title */
+}
+
+.product-card .ant-card-meta-description {
+  font-size: 0.9em; /* Slightly smaller font size for description */
+  color: #666; /* Gray color for the description text */
+}
+
+.price-info {
+  display: flex; /* Flexbox for price alignment */
+  align-items: center; /* Center align items */
+}
+
+.price-info span {
+  margin-right: 10px; /* Space between price elements */
+}
+
+button {
+  border-radius: 5px; /* Rounded corners for buttons */
+}
+
+.ant-btn-primary {
+  background-color: #1890ff; /* Primary button color */
+  border: none; /* Remove border */
+  padding: 10px 20px; /* Padding for button */
+  font-size: 1em; /* Larger font size for readability */
+}
+
+.ant-btn-primary:hover {
+  background-color: #40a9ff; /* Darker shade on hover */
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    margin: 0 auto; /* Center cards on smaller screens */
+  }
+}
