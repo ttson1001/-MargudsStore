@@ -39,4 +39,8 @@ export const fakeCategories = [
     categoryID: 10,
     name: "Health & Wellness",
   },
+  {
+    categoryID: 10,
+    name: "Health & Wellness",
+  },
 ];
