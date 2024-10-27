@@ -1,83 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Row, Col, Card, Button, Carousel } from "antd";
 import "./home-page.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_SERVER } from "../api/admin-api";
 
 const { Content } = Layout;
 
-const categoriesWithProducts = {
-  "Móc khóa": [
-    {
-      id: 1,
-      name: "Mô hình standee 8cm ORV Toàn Trí Độc Giả - Yoo Joonghyuk",
-      price: 110000,
-      originalPrice: 1299000,
-      discount: "97%",
-      image:
-        "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lucdahvrykgvfb.webp",
-    },
-    {
-      id: 2,
-      name: "Mô hình standee 8cm ORV Toàn Trí Độc Giả - YooHanKim",
-      price: 110000,
-      originalPrice: 260000,
-      discount: "70%",
-      image:
-        "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lucdahvrzz1b45.webp",
-    },
-    {
-      id: 3,
-      name: "Plushie bông My S Class Hunters có còi Han Yoohyun",
-      price: 142000,
-      originalPrice: 260000,
-      discount: "70%",
-      image:
-        "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lytdudiqnm1962.webp",
-    },
-    {
-      id: 4,
-      name: "Plushie bông My S Class Hunters có còi Han Yoojin",
-      price: 142000,
-      originalPrice: 260000,
-      discount: "70%",
-      image:
-        "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lytdudiq861tc0.webp",
-    },
-  ],
-  "Truyện tranh": [
-    {
-      id: 3,
-      name: "Spotify Premium 1 năm",
-      price: 390000,
-      originalPrice: 708000,
-      discount: "45%",
-      image: "https://path-to-image.com/product3.jpg",
-    },
-  ],
-  "Mô hình": [
-    {
-      id: 4,
-      name: "Zoom Pro ~1 tháng",
-      price: 210000,
-      originalPrice: 350000,
-      discount: "40%",
-      image: "https://path-to-image.com/product4.jpg",
-    },
-  ],
-};
-
 const HomePage = () => {
+  const [data, setData] = useState([]);
+  const [load, setLoad] = useState(false);
   const navigate = useNavigate();
 
-  const handleClickCard = (value: number) => {
-    navigate("../product/" + value);
+  const handleClickCard = (productID: number) => {
+    navigate(`../product/${productID}`);
   };
-  const handleClick = (value: string) => {
-    navigate("../list/" + value);
+
+  const handleClick = (categoryName: string) => {
+    navigate(`../list/${categoryName}`);
   };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          API_SERVER + "api/category/GetAllCategory"
+        );
+        setData(response.data.data); // Use the data field
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
+    setLoad(false);
+  }, [load]);
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content className="custom-content">
+        {/* Carousel for banners */}
         <Carousel autoplay>
           <div>
             <img
@@ -95,26 +57,34 @@ const HomePage = () => {
           </div>
         </Carousel>
 
-        {Object.entries(categoriesWithProducts).map(([category, products]) => (
-          <div key={category} style={{ marginBottom: "40px" }}>
+        {/* Iterate over categories and products */}
+        {data.map((categoryItem: any) => (
+          <div key={categoryItem.categoryID} style={{ marginBottom: "40px" }}>
             <div className="flex justify-between w-full mt-5 mb-5">
-              <span className="text-3xl font-bold">{category}</span>
-              <Button onClick={() => handleClick(category)} type="primary">
+              <span className="text-3xl font-bold">{categoryItem.name}</span>
+              <Button
+                onClick={() => handleClick(categoryItem.categoryID)}
+                type="primary"
+              >
                 Khám Phá
               </Button>
             </div>
 
             <Row gutter={[16, 16]} justify="start">
-              {products.map((product) => (
-                <Col xs={24} sm={12} md={8} lg={6} key={product.id}>
+              {categoryItem.products.map((product: any) => (
+                <Col xs={24} sm={12} md={8} lg={6} key={product.productID}>
                   <Card
-                    onClick={() => handleClickCard(product.id)}
+                    onClick={() => handleClickCard(product.productID)}
                     hoverable
                     cover={
                       <img
                         style={{ objectFit: "contain" }}
                         alt={product.name}
-                        src={product.image}
+                        src={
+                          product.imageProducts.length > 0
+                            ? product.imageProducts[0].url // Assuming imageProducts has an array with a url field
+                            : "https://via.placeholder.com/150" // Fallback image
+                        }
                       />
                     }
                     className="product-card"
@@ -124,7 +94,7 @@ const HomePage = () => {
                       description={
                         <div>
                           <span style={{ fontWeight: "bold" }}>
-                            {product.price}đ
+                            {product.purchasePrice}đ
                           </span>
                         </div>
                       }

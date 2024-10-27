@@ -1,66 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Rate } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { fakeProductss } from "../data/fake-product";
-
-const products = [
-  {
-    id: 1,
-    name: "Product 1",
-    price: "$10",
-    image: "https://via.placeholder.com/150",
-    rating: 4,
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    price: "$20",
-    image: "https://via.placeholder.com/150",
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    price: "$30",
-    image: "https://via.placeholder.com/150",
-    rating: 3,
-  },
-  {
-    id: 4,
-    name: "Product 4",
-    price: "$40",
-    image: "https://via.placeholder.com/150",
-    rating: 4.5,
-  },
-  {
-    id: 5,
-    name: "Product 5",
-    price: "$25",
-    image: "https://via.placeholder.com/150",
-    rating: 4,
-  },
-  {
-    id: 6,
-    name: "Product 6",
-    price: "$35",
-    image: "https://via.placeholder.com/150",
-    rating: 5,
-  },
-  {
-    id: 7,
-    name: "Product 7",
-    price: "$45",
-    image: "https://via.placeholder.com/150",
-    rating: 4,
-  },
-];
+import axios from "axios";
+import { API_SERVER } from "../api/admin-api";
 
 const ProductList = () => {
   const { category } = useParams();
+  const [data, setData] = useState<any>([]);
+  const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   const handleClickCard = (value: number) => {
     navigate("../product/" + value);
   };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          API_SERVER + `api/category/GetCategory/` + category
+        );
+        setData(response.data.data.products); // Use the data field
+        console.log(response.data.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
+    setLoad(false);
+  }, [load]);
+
   return (
     <div>
       {/* Banner Section */}
@@ -90,10 +60,10 @@ const ProductList = () => {
 
       {/* Product List Section */}
       <Row gutter={16} style={{ padding: "16px" }}>
-        {fakeProductss.map((product) => (
-          <Col span={8} key={product.id}>
+        {data.map((product: any) => (
+          <Col span={8} key={product?.id}>
             <Card
-              onClick={() => handleClickCard(product.id)}
+              onClick={() => handleClickCard(product?.productID)}
               hoverable
               style={{
                 borderRadius: "10px",
@@ -102,8 +72,8 @@ const ProductList = () => {
               }}
               cover={
                 <img
-                  alt={product.name}
-                  src={product.imageUrl[0]}
+                  alt={product?.name}
+                  src={product?.imageProducts[0]}
                   style={{
                     borderRadius: "10px 10px 0 0",
                     height: "200px",
@@ -113,11 +83,11 @@ const ProductList = () => {
               }
             >
               <Card.Meta
-                title={product.name}
+                title={product?.name}
                 description={
                   <div>
                     <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                      {product.purchasePrice}
+                      {product?.purchasePrice}
                     </span>
                     <br />
                   </div>

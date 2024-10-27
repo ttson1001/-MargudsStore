@@ -8,6 +8,7 @@ import {
   Table,
   TableProps,
   Tooltip,
+  Form,
 } from "antd";
 import "./account-page.css";
 import {
@@ -16,8 +17,11 @@ import {
   CloseOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fakeUsers } from "../data/fake-data";
+import axios from "axios";
+import { API_SERVER, createUser, updateUser } from "../api/admin-api";
+
 interface DataType {
   userID: any;
   userName: string;
@@ -33,121 +37,85 @@ interface DataType {
 
 const AccountManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<DataType | null>(null); // Lưu trữ user cần chỉnh sửa
+  const [selectedUser, setSelectedUser] = useState<DataType | null>(null);
+  const [isLoad, setIsLoad] = useState<Boolean>(false);
+  const [data, setData] = useState<DataType[]>([]);
+  const [form] = Form.useForm(); // Initialize form
 
-  let data: DataType[] = fakeUsers;
   const { confirm } = Modal;
 
   const showModal = () => {
     setIsModalOpen(true);
-    setSelectedUser(null); // Khi thêm mới, không có user nào được chọn
+    setSelectedUser(null); // When adding a new user, no user should be selected
+    form.resetFields(); // Reset form fields when adding a new user
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          API_SERVER + "api/account/Get-all-accounts"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUsers();
+    setIsLoad(false);
+  }, [isLoad]);
 
   const handleEdit = (record: DataType) => {
     setSelectedUser(record);
+    form.setFieldsValue(record); // Set form values to selected user data
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    // Nếu đang chỉnh sửa user, thực hiện logic lưu user đã chỉnh sửa ở đây
-    if (selectedUser) {
-      console.log("Updating user:", selectedUser);
-      // Cập nhật dữ liệu fakeUsers hoặc gọi API để cập nhật dữ liệu thực tế
+  const handleOk = async () => {
+    try {
+      const formValues = await form.validateFields(); // Validate form before submit
+      console.log(formValues.role);
+      if (selectedUser) {
+        // Updating user
+        await updateUser(selectedUser.userID, formValues);
+      } else {
+        // Creating new user
+        await createUser(formValues);
+      }
+      setIsLoad(true);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.log("Validation failed:", error);
     }
-    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (selectedUser) {
-      setSelectedUser({
-        ...selectedUser,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
-  const showDeleteConfirm = (e: any) => {
-    confirm({
-      title: "Are you sure delete this task?",
-      icon: <ExclamationCircleFilled />,
-      content: "Some descriptions",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk() {
-        data = data.filter((x) => x.userID === e.userId);
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
-    });
-  };
-
   const columns: TableProps<DataType>["columns"] = [
-    {
-      title: "User ID",
-      dataIndex: "userID",
-      key: "userID",
-    },
-    {
-      title: "Username",
-      dataIndex: "userName",
-      key: "userName",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Phone",
-      key: "phone",
-      dataIndex: "phone",
-    },
-    {
-      title: "Roles",
-      key: "roles",
-      dataIndex: "roles",
-    },
-    {
-      title: "Image",
-      key: "image",
-      dataIndex: "image",
-    },
+    { title: "User ID", dataIndex: "userID", key: "userID" },
+    { title: "Username", dataIndex: "userName", key: "userName" },
+    { title: "Email", dataIndex: "email", key: "email" },
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Address", dataIndex: "address", key: "address" },
+    { title: "Phone", dataIndex: "phone", key: "phone" },
+    { title: "Roles", dataIndex: "roles", key: "roles" },
+    { title: "Image", dataIndex: "image", key: "image" },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <>
           <Button
-            key="back"
             type="text"
             className="text-cyan-500"
             onClick={() => handleEdit(record)}
           >
             <EditOutlined />
           </Button>
-          <Button
-            key="submit"
-            type="text"
-            className="text-red-500"
-            onClick={() => showDeleteConfirm(record)}
-          >
+          <Button type="text" className="text-red-500">
             <CloseOutlined />
           </Button>
         </>
@@ -161,12 +129,10 @@ const AccountManagement: React.FC = () => {
         <Breadcrumb.Item>User</Breadcrumb.Item>
         <Breadcrumb.Item>Bill</Breadcrumb.Item>
       </Breadcrumb>
+
       <div
         className="bg-white rounded-md"
-        style={{
-          padding: 24,
-          minHeight: "80vh",
-        }}
+        style={{ padding: 24, minHeight: "80vh" }}
       >
         <p className="text-3xl font-bold">User Management</p>
         <div className="flex justify-end">
@@ -181,7 +147,7 @@ const AccountManagement: React.FC = () => {
         </div>
 
         <Modal
-          title={selectedUser ? "Edit User" : "Add User"} // Thay đổi tiêu đề modal
+          title={selectedUser ? "Edit User" : "Add User"}
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -190,114 +156,77 @@ const AccountManagement: React.FC = () => {
               Cancel
             </Button>,
             <Button key="submit" type="primary" onClick={handleOk}>
-              {selectedUser ? "Save" : "Add"}{" "}
-              {/* Nút thay đổi tùy theo hành động */}
+              {selectedUser ? "Save" : "Add"}
             </Button>,
           ]}
         >
-          <div>
-            <label htmlFor="" className="label">
-              Username :
-            </label>
-            <Input
+          <Form form={form} layout="vertical">
+            <Form.Item
+              label="Username"
               name="userName"
-              value={selectedUser?.userName || ""}
-              onChange={handleInputChange}
-              placeholder="Outlined"
-              className="label"
-            />
-          </div>
-          <div>
-            <label htmlFor="" className="label">
-              Email :
-            </label>
-            <Input
-              name="email"
-              value={selectedUser?.email || ""}
-              onChange={handleInputChange}
-              placeholder="Outlined"
-            />
-          </div>
-          <div>
-            <label htmlFor="" className="label">
-              Name :
-            </label>
-            <Input
-              name="name"
-              value={selectedUser?.name || ""}
-              onChange={handleInputChange}
-              placeholder="Outlined"
-            />
-          </div>
-          <div>
-            <label htmlFor="" className="label">
-              Pasword :
-            </label>
-            <div>
-              <Space direction="horizontal">
-                <Input.Password
-                  className="w-full"
-                  placeholder="input password"
-                  visibilityToggle={{
-                    visible: passwordVisible,
-                    onVisibleChange: setPasswordVisible,
-                  }}
-                />
-                <Button
-                  style={{ width: 80 }}
-                  onClick={() => setPasswordVisible((prevState) => !prevState)}
-                >
-                  {passwordVisible ? "Hide" : "Show"}
-                </Button>
-              </Space>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="" className="label">
-              Address :
-            </label>
-            <Input
-              name="address"
-              value={selectedUser?.address || ""}
-              onChange={handleInputChange}
-              placeholder="Outlined"
-            />
-          </div>
-          <div>
-            <label htmlFor="" className="label">
-              Phone Number :
-            </label>
-            <Input
-              name="phone"
-              value={selectedUser?.phone || ""}
-              onChange={handleInputChange}
-              placeholder="Outlined"
-            />
-          </div>
-          <div>
-            <label htmlFor="" className="label">
-              Role :
-            </label>
-            <Select
-              defaultValue={selectedUser?.roles[0] || "1"}
-              className="w-full"
-              options={[
-                { value: "1", label: "User" },
-                { value: "2", label: "Admin" },
+              rules={[
+                { required: true, message: "Please input the username!" },
               ]}
-            />
-          </div>
-          <div>
-            <label htmlFor="" className="label">
-              Image :
-            </label>
-            <Input
-              name="image"
-              value={selectedUser?.image || ""}
-              onChange={handleInputChange}
-              placeholder="Outlined"
-            />
-          </div>
+            >
+              <Input placeholder="Username" />
+            </Form.Item>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Please input a valid email!",
+                },
+              ]}
+            >
+              <Input placeholder="Email" />
+            </Form.Item>
+
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please input the name!" }]}
+            >
+              <Input placeholder="Name" />
+            </Form.Item>
+
+            {!selectedUser && (
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  { required: true, message: "Please input the password!" },
+                ]}
+              >
+                <Input.Password placeholder="Password" />
+              </Form.Item>
+            )}
+
+            <Form.Item label="Address" name="address">
+              <Input placeholder="Address" />
+            </Form.Item>
+
+            <Form.Item label="Phone Number" name="phone">
+              <Input placeholder="Phone Number" />
+            </Form.Item>
+
+            <Form.Item label="Role" name="roles">
+              <Select
+                defaultValue="Customer"
+                options={[
+                  { value: "Customer", label: "Customer" },
+                  { value: "Admin", label: "Admin" },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item label="Image" name="image">
+              <Input placeholder="Image URL" />
+            </Form.Item>
+          </Form>
         </Modal>
 
         <Table

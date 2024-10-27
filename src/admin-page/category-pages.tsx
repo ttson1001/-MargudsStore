@@ -17,7 +17,7 @@ import {
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { createCategory, updateCategory } from "../api/admin-api";
+import { API_SERVER, createCategory, updateCategory } from "../api/admin-api";
 
 interface DataType {
   categoryID: number;
@@ -39,7 +39,7 @@ const CategoryManagement: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://marguds.azurewebsites.net/api/category/GetAllCategory"
+          API_SERVER + "api/category/GetAllCategory"
         );
         setData(response.data.data);
         console.log(data);
@@ -50,7 +50,7 @@ const CategoryManagement: React.FC = () => {
 
     fetchProducts();
     setIsLoad(false);
-  }, [data, isLoad]);
+  }, [isLoad]);
 
   const showModal = () => {
     setIsModalOpen(true);

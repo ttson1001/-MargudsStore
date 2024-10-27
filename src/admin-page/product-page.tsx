@@ -20,6 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
+  API_SERVER,
   deleteProduct,
   postProduct,
   updateCategory,
@@ -77,7 +78,7 @@ const ProductManagement: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://marguds.azurewebsites.net/api/Product/GetForManagement"
+          API_SERVER + "api/Product/GetForManagement"
         );
         setData(response.data.data);
         console.log(data);

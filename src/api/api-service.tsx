@@ -1,14 +1,12 @@
 import axios from "axios";
+import { API_SERVER } from "./admin-api";
 
 export const login = async (username: string, password: string) => {
   try {
-    const response = await axios.post(
-      "https://marguds.azurewebsites.net/api/account/login",
-      {
-        username,
-        password,
-      }
-    );
+    const response = await axios.post(API_SERVER + "api/account/login", {
+      username,
+      password,
+    });
 
     // Lấy JWT token từ response
     const token = response.data.token;
