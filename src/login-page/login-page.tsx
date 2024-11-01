@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
     if (rs.roles.includes("Customer")) {
       navigate("../home/list");
     }
-    if (rs.roles.includes("Admin")) {
+    if (rs.roles.includes("Admin"))|| (rs.roles.includes("Manager")) {
       navigate("../dashboard");
     }
   };
