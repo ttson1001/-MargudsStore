@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_SERVER = "https://marguds.azurewebsites.net/";
+export const API_SERVER = "https://localhost:7208/";
 export const createCategory = async (name: string) => {
   try {
     const response = await axios.post(

@@ -11,15 +11,19 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const rs = await login(username, password);
+    const rs = await login(username, password).catch((e) => {
+      console.log(e.message);
+    });
 
-    console.log("Login attempted with:", { username, password });
-    if (rs.roles.includes("Customer")) {
+    if (rs?.roles?.includes("Customer")) {
       navigate("../home/list");
+      return;
     }
-    if (rs.roles.includes("Admin") || rs.roles.includes("Manager")) {
+    if (rs?.roles?.includes("Admin") || rs?.roles?.includes("Manager")) {
       navigate("../dashboard");
+      return;
     }
+    if (rs.includes("confirm email")) navigate("../verify");
   };
 
   return (

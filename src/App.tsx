@@ -11,19 +11,20 @@ import DashboardPage from "./admin-page/dashborad-page";
 import OrderManagement from "./admin-page/order-page";
 import LoginPage from "./login-page/login-page";
 import RegisterPage from "./login-page/register-page";
-import TestPage from "./home-page/home-page";
 import HomeLayout from "./home-page/home-layout";
 import HomePage from "./home-page/home-page";
 import ProductList from "./home-page/product-list";
 import ProductDetail from "./home-page/product-detail-page";
 import CartPage from "./home-page/cart-page";
 import AboutContent from "./home-page/about-page";
-
+import Test from "./home-page/test.page";
+import InputCode from "./login-page/InputCode";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/test" element={<TestPage />}></Route>
+        <Route path="/test" element={<Test />}></Route>
         <Route path="/" element={<AdminPage />}>
           <Route path="report" element={<ReportManagement />}></Route>
           <Route path="dashboard" element={<DashboardPage />}></Route>
@@ -41,7 +42,7 @@ function App() {
           <Route path="room" element={<RoomPage />}></Route>
           <Route path="xuatchieu" element={<XuatChieu />}></Route> */}
         </Route>
-        {/* <Route path="register" element={<Register />}></Route> */}
+        <Route path="/verify" element={<InputCode />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/home" element={<HomeLayout />}>

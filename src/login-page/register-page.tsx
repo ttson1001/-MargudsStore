@@ -2,16 +2,15 @@ import React from "react";
 import { Form, Input, Button, message } from "antd";
 import "./register-page.css"; // Import your CSS for styling
 import { Link } from "react-router-dom";
+import { register } from "../api/api-service";
 
 const RegisterPage: React.FC = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    // Here you would typically make an API call to register the user
-    message.success("Registration successful!");
-    // Redirect to homepage after successful registration
-    // You can use history.push("/home") if using react-router
+  const onFinish = async (values: any) => {
+    const rs = await register(values);
+
+    console.log(rs);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -84,16 +83,6 @@ const RegisterPage: React.FC = () => {
             name="phone"
             rules={[
               { required: true, message: "Please input your phone number!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Image URL"
-            name="image"
-            rules={[
-              { required: true, message: "Please input your image URL!" },
             ]}
           >
             <Input />
