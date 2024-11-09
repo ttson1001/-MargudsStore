@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Badge,
@@ -14,6 +14,9 @@ import {
 import { Outlet, useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import logo from "../access/images/LogoEXE-01.png";
+import useUserStore from "../api/store";
+import { API_SERVER } from "../api/admin-api";
+import axios from "axios";
 
 const { Header, Content, Footer } = Layout;
 
@@ -31,16 +34,21 @@ const App: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
+  const [totalQuantity, setTotalQuantity] = useState();
+
   const handleMenuClick = (e: { key: string }) => {
     switch (e.key) {
       case "profile":
-        navigate("../profile");
+        navigate("/home/profile");
         break;
       case "settings":
         navigate("../settings");
         break;
       case "logout":
-        navigate("../login");
+        clearUser();
+        navigate("../");
         break;
       case "home":
         navigate("/home/list");
@@ -51,14 +59,39 @@ const App: React.FC = () => {
       case "about":
         navigate("/home/about");
         break;
+      case "change password":
+        navigate("/home/change-password");
+        break;
       default:
         break;
     }
   };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          API_SERVER + `api/Cart/` + user.userID
+        );
+        const cartData = response.data.data.cartItem;
+
+        console.log(cartData);
+        setTotalQuantity(
+          cartData.reduce((total: any, item: any) => total + item.quantity, 0)
+        );
+        console.log(totalQuantity);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
+  }, [user]);
+
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="profile">Profile</Menu.Item>
+      <Menu.Item key="change password">Change Password</Menu.Item>
       <Menu.Item key="settings">Settings</Menu.Item>
       <Menu.Item key="logout">Logout</Menu.Item>
     </Menu>
@@ -96,15 +129,18 @@ const App: React.FC = () => {
           style={{ flex: 1, minWidth: 0 }}
         />
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Badge count={5}>
+          <Badge count={totalQuantity}>
             <ShoppingCartOutlined
+              onClick={() => {
+                navigate("/home/cart");
+              }}
               style={{ fontSize: "24px", color: "white", marginRight: "16px" }}
             />
           </Badge>
           <Dropdown overlay={menu} trigger={["click"]} className="ml-5">
             <Avatar
               size="large"
-              src="https://via.placeholder.com/150"
+              src={user.image}
               style={{ cursor: "pointer" }}
             />
           </Dropdown>

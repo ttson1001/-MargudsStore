@@ -11,14 +11,8 @@ import {
   Form,
 } from "antd";
 import "./account-page.css";
-import {
-  PlusOutlined,
-  EditOutlined,
-  CloseOutlined,
-  ExclamationCircleFilled,
-} from "@ant-design/icons";
+import { PlusOutlined, EditOutlined, CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { fakeUsers } from "../data/fake-data";
 import axios from "axios";
 import { API_SERVER, createUser, updateUser } from "../api/admin-api";
 
@@ -102,7 +96,16 @@ const AccountManagement: React.FC = () => {
     { title: "Address", dataIndex: "address", key: "address" },
     { title: "Phone", dataIndex: "phone", key: "phone" },
     { title: "Roles", dataIndex: "roles", key: "roles" },
-    { title: "Image", dataIndex: "image", key: "image" },
+    {
+      title: "Image",
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => (
+        <>
+          <img src={record.image} alt="" width={50} />
+        </>
+      ),
+    },
     {
       title: "Action",
       key: "action",
@@ -234,7 +237,7 @@ const AccountManagement: React.FC = () => {
           dataSource={data}
           style={{ height: "400px" }}
           scroll={{ y: 400 }}
-          pagination={{ pageSize: 10, total: fakeUsers.length }}
+          pagination={{ pageSize: 10, total: data.length }}
         />
       </div>
     </>

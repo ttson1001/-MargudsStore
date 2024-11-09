@@ -3,17 +3,21 @@ import { Form, Input, Button, Breadcrumb } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import "./login-page.css";
 import { login } from "../api/api-service";
+import useUserStore from "../api/store";
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    const rs = await login(username, password).catch((e) => {
+  const setUser = useUserStore((state) => state.setUser);
+
+  const onFinish = async (values: any) => {
+    const rs = await login(values.username, values.password).catch((e) => {
       console.log(e.message);
     });
+    if (rs?.roles) {
+      setUser(rs);
+    }
 
     if (rs?.roles?.includes("Customer")) {
       navigate("../home/list");
@@ -26,27 +30,36 @@ const LoginPage: React.FC = () => {
     if (rs.includes("confirm email")) navigate("../verify");
   };
 
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
-        <Form layout="vertical">
-          <Form.Item label="Username">
-            <Input
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username"
-            />
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            label="Username"
+            name="username" // Add the name prop here
+            rules={[{ required: true, message: "Please input your username!" }]}
+          >
+            <Input />
           </Form.Item>
-          <Form.Item label="Password">
-            <Input.Password
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
+          <Form.Item
+            label="Password"
+            name="password" // Add the name prop here
+            rules={[{ required: true, message: "Please input your Password!" }]}
+          >
+            <Input.Password />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" onClick={handleLogin}>
+            <Button type="primary" htmlType="submit">
               Login
             </Button>
           </Form.Item>

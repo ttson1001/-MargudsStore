@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_SERVER } from "../api/admin-api";
 import { getOrderStatus } from "../api/api-service";
-import "./order-page.css";
+import useUserStore from "../api/store";
 
 const { Option } = Select;
 
@@ -29,17 +29,19 @@ export interface ShippingInfo {
   shippingCost: number;
 }
 
-const OrderManagement: React.FC = () => {
+const OrderHistory: React.FC = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [currentRecord, setCurrentRecord] = useState<DataType | null>(null);
 
+  const user = useUserStore((state) => state.user);
+
   useEffect(() => {
     const getAllOrders = async () => {
       try {
         const response = await axios.get(
-          API_SERVER + "api/Order/get-all-orders"
+          API_SERVER + "api/Order/get-all-orders-by-id/" + user.userID
         );
         setData(response.data.data);
       } catch (error) {
@@ -292,4 +294,4 @@ const OrderManagement: React.FC = () => {
   );
 };
 
-export default OrderManagement;
+export default OrderHistory;

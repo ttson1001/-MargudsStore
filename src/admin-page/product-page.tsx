@@ -16,6 +16,7 @@ import {
   EditOutlined,
   CloseOutlined,
   ExclamationCircleFilled,
+  EyeFilled,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -23,9 +24,11 @@ import {
   API_SERVER,
   deleteProduct,
   postProduct,
-  updateCategory,
   updateProduct,
 } from "../api/admin-api";
+import TextArea from "antd/es/input/TextArea";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 interface DataType {
   productID: number;
@@ -63,10 +66,17 @@ interface Category {
 
 const ProductManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShowDetail, setIsShowDetail] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<DataType | null>(null);
+  const [category, setCategory] = useState<any>([]);
   const [data, setData] = useState<DataType[]>([]);
   const [isLoad, setIsLoad] = useState<Boolean>(false);
   const [form] = Form.useForm();
+  const [description, setDescription] = useState<string>("");
+
+  const handleDescriptionChange = (value: string) => {
+    setDescription(value);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -90,6 +100,23 @@ const ProductManagement: React.FC = () => {
     fetchProducts();
     setIsLoad(false);
   }, [isLoad]);
+
+  useEffect(() => {
+    const getAllCategory = async () => {
+      try {
+        const response = await axios.get(
+          API_SERVER + "api/category/GetAllCategory"
+        );
+        setCategory(response.data.data);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getAllCategory();
+    setIsLoad(false);
+  }, []);
 
   const handleEdit = (record: DataType) => {
     setSelectedProduct(record);
@@ -115,14 +142,18 @@ const ProductManagement: React.FC = () => {
             image: url.trim(), // Remove whitespace
           }))
         : [];
+      console.log(description);
       if (selectedProduct) {
-        updateProduct({ ...values, imageProducts }, selectedProduct.productID);
+        updateProduct(
+          { ...values, imageProducts, description },
+          selectedProduct.productID
+        );
         console.log("Updating product:", { ...selectedProduct, ...values });
         setIsLoad(true);
         setIsModalOpen(false);
       } else {
         console.log(values);
-        postProduct({ ...values, imageProducts });
+        postProduct({ ...values, imageProducts, description });
         setIsLoad(true);
         setIsModalOpen(false);
       }
@@ -131,6 +162,10 @@ const ProductManagement: React.FC = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const showDetail = () => {
+    setIsShowDetail(true);
   };
 
   const showDeleteConfirm = (record: DataType) => {
@@ -167,19 +202,16 @@ const ProductManagement: React.FC = () => {
       key: "inventoryQuantity",
     },
     {
-      title: "Des.",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
       title: "Unit Price",
       dataIndex: "unitPrice",
       key: "unitPrice",
+      render: (text: number) => `${text.toLocaleString()} VND`, // Hiển thị giá trị với đơn vị VND
     },
     {
       title: "Purchase Price",
       dataIndex: "purchasePrice",
       key: "purchasePrice",
+      render: (text: number) => `${text.toLocaleString()} VND`, // Hiển thị giá trị với đơn vị VND
     },
     {
       title: "Supplier",
@@ -217,11 +249,6 @@ const ProductManagement: React.FC = () => {
       dataIndex: "length",
       key: "length",
     },
-    // {
-    //   title: "Images",
-    //   dataIndex: "imageProducts",
-    //   key: "imageProducts",
-    // },
     {
       title: "Category",
       dataIndex: "category",
@@ -261,10 +288,62 @@ const ProductManagement: React.FC = () => {
           >
             <CloseOutlined />
           </Button>
+          <Button
+            type="text"
+            className="text-blue-500"
+            onClick={() => handleViewDetails(record)} // Xem chi tiết sản phẩm
+          >
+            <EyeFilled />
+          </Button>
         </>
       ),
     },
   ];
+
+  const handleViewDetails = (record: DataType) => {
+    Modal.info({
+      title: record.name, // Hiển thị tên sản phẩm
+      width: 800, // Thiết lập chiều rộng modal (800px)
+      content: (
+        <div>
+          <p>
+            <strong>Description:</strong>
+            <p dangerouslySetInnerHTML={{ __html: record?.description }}></p>
+          </p>
+          <p>
+            <strong>Category:</strong> {record.category.name}
+          </p>
+          <p>
+            <strong>Unit Price:</strong> {record.unitPrice.toLocaleString()} VND
+          </p>{" "}
+          {/* Hiển thị giá bằng VND */}
+          <p>
+            <strong>Purchase Price:</strong>{" "}
+            {record.purchasePrice.toLocaleString()} VND
+          </p>{" "}
+          {/* Hiển thị giá mua bằng VND */}
+          <p>
+            <strong>Supplier:</strong> {record.supplier}
+          </p>
+          <p>
+            <strong>Status:</strong> {record.status ? "Active" : "Inactive"}
+          </p>
+          <div>
+            <strong>Images:</strong>
+            {record.imageProducts.map((image, index) => (
+              <img
+                key={index}
+                src={image.image}
+                alt={`Product Image ${index + 1}`}
+                style={{ width: "150px", margin: "10px" }}
+              />
+            ))}
+          </div>
+        </div>
+      ),
+      onOk() {},
+    });
+  };
 
   return (
     <>
@@ -387,10 +466,19 @@ const ProductManagement: React.FC = () => {
                   label="Category"
                   name="categoryID"
                   rules={[
-                    { required: true, message: "Please input the category!" },
+                    { required: true, message: "Please select the category!" },
                   ]}
                 >
-                  <Input placeholder="Enter product category" />
+                  <Select placeholder="Select product category">
+                    {category.map((category: any) => (
+                      <Select.Option
+                        key={category.categoryID}
+                        value={category.categoryID}
+                      >
+                        {category.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
 
                 <Form.Item
@@ -400,7 +488,7 @@ const ProductManagement: React.FC = () => {
                     { required: true, message: "Please upload an image!" },
                   ]}
                 >
-                  <Input placeholder="Enter image URL" />
+                  <TextArea placeholder="Enter image URL" />
                 </Form.Item>
 
                 <Form.Item
@@ -464,10 +552,19 @@ const ProductManagement: React.FC = () => {
             </Row>
 
             {/* Description field at the end */}
-            <Form.Item label="Description" name="description">
-              <Input.TextArea
-                placeholder="Enter product description"
-                rows={4}
+            <Form.Item
+              label="Description"
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter a product description!",
+                },
+              ]}
+            >
+              <ReactQuill
+                value={description}
+                onChange={handleDescriptionChange}
               />
             </Form.Item>
           </Form>

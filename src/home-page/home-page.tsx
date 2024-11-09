@@ -82,7 +82,7 @@ const HomePage = () => {
                         alt={product.name}
                         src={
                           product.imageProducts.length > 0
-                            ? product.imageProducts[0].url // Assuming imageProducts has an array with a url field
+                            ? product.imageProducts[0].image // Assuming imageProducts has an array with a url field
                             : "https://via.placeholder.com/150" // Fallback image
                         }
                       />

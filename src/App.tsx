@@ -1,5 +1,3 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import AdminPage from "./admin-page/admin-page";
@@ -20,46 +18,51 @@ import AboutContent from "./home-page/about-page";
 import Test from "./home-page/test.page";
 import InputCode from "./login-page/InputCode";
 import "react-toastify/dist/ReactToastify.css";
+import PaymentSuccessPage from "./home-page/PaymentSuccessPage";
+import OrderHistory from "./home-page/orderHistory";
+import UserProfile from "./home-page/userProfile";
+import ChangePassword from "./home-page/changePassword";
+import NotFoundPage from "./home-page/NotFoundPage";
+import { Helmet } from "react-helmet";
+
 function App() {
   return (
     <>
+      <Helmet>
+        <title>Margudsstore</title> {/* Thay đổi title động */}
+      </Helmet>
       <Routes>
-        <Route path="/test" element={<Test />}></Route>
-        <Route path="/" element={<AdminPage />}>
-          <Route path="report" element={<ReportManagement />}></Route>
-          <Route path="dashboard" element={<DashboardPage />}></Route>
-          <Route path="user" element={<AccountManagement />}></Route>
-          <Route path="product/list" element={<ProductManagement />}></Route>
-          <Route
-            path="product/category"
-            element={<CategoryManagement />}
-          ></Route>
-          <Route path="order" element={<OrderManagement />}></Route>
-          {/* <Route path="film" element={<FilmPage />}></Route>
-          <Route path="film/:id" element={<FilmDetailPage />}></Route>
-          <Route path="booking" element={<BookingPage />}></Route>
-          <Route path="dashboard" element={<DashboardPage />}></Route>
-          <Route path="room" element={<RoomPage />}></Route>
-          <Route path="xuatchieu" element={<XuatChieu />}></Route> */}
-        </Route>
-        <Route path="/verify" element={<InputCode />}></Route>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/register" element={<RegisterPage />}></Route>
+        {/* Route gốc sẽ dẫn đến trang Login */}
+        <Route path="/" element={<LoginPage />} />
+
+        {/* Các route khác */}
+        <Route path="/test" element={<Test />} />
+        <Route path="/verify" element={<InputCode />} />
+        <Route path="/register" element={<RegisterPage />} />
+
         <Route path="/home" element={<HomeLayout />}>
-          <Route path="list" element={<HomePage />}></Route>
-          <Route path="list/:category" element={<ProductList />}></Route>
-          <Route path="product/:id" element={<ProductDetail />}></Route>
-          <Route path="cart" element={<CartPage />}></Route>
-          <Route path="about" element={<AboutContent />}></Route>
+          <Route path="list" element={<HomePage />} />
+          <Route path="list/:category" element={<ProductList />} />
+          <Route path="product/:id" element={<ProductDetail />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="order" element={<OrderHistory />} />
+          <Route path="profile" element={<UserProfile />} />
+          <Route path="change-password" element={<ChangePassword />} />
+          <Route path="paymentSuccessPage" element={<PaymentSuccessPage />} />
+          <Route path="about" element={<AboutContent />} />
         </Route>
-        {/* <Route path="" element={<TrangChu />}>
-        <Route path="film/:id" element={<Film />}></Route>
-        <Route path="home" element={<Home />}></Route>
-        <Route path="ticket" element={<Ticket />}></Route>
-        <Route path="films" element={<Films />}></Route>
-        <Route path="booking/:id" element={<Booking />}></Route>
-        <Route path="profile" element={<Profile />}></Route>
-      </Route> */}
+
+        <Route path="/admin" element={<AdminPage />}>
+          <Route path="report" element={<ReportManagement />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="user" element={<AccountManagement />} />
+          <Route path="product/list" element={<ProductManagement />} />
+          <Route path="product/category" element={<CategoryManagement />} />
+          <Route path="order" element={<OrderManagement />} />
+        </Route>
+
+        {/* Route mặc định cho trang 404 */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

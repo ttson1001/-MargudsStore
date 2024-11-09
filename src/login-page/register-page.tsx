@@ -1,16 +1,19 @@
 import React from "react";
 import { Form, Input, Button, message } from "antd";
 import "./register-page.css"; // Import your CSS for styling
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/api-service";
 
 const RegisterPage: React.FC = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
     const rs = await register(values);
 
-    console.log(rs);
+    if (rs) {
+      navigate("../login");
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -95,7 +98,7 @@ const RegisterPage: React.FC = () => {
           </Form.Item>
         </Form>
         <div className="redirect-login">
-          <Link to="/login">Already have an account? Log in</Link>
+          <Link to="../">Already have an account? Log in</Link>
         </div>
       </div>
     </div>

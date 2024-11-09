@@ -19,7 +19,7 @@ const InputCode: React.FC = () => {
       // Kiểm tra trạng thái phản hồi
       if (response.status === 200) {
         toast.success("Mã xác nhận thành công!"); // Thông báo thành công
-        navigate("../login");
+        navigate("../");
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

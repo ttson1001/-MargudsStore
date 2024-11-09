@@ -31,14 +31,14 @@ function getItem(
 
 // Menu items with key values corresponding to the routes you want to navigate to
 const items: MenuItem[] = [
-  getItem("Dashboard", "/dashboard", <PieChartOutlined />),
-  getItem("Report", "/report", <DesktopOutlined />),
-  getItem("User", "/user", <UserOutlined />),
+  getItem("Dashboard", "/admin/dashboard", <PieChartOutlined />),
+  getItem("Report", "/admin/report", <DesktopOutlined />),
+  getItem("User", "/admin/user", <UserOutlined />),
   getItem("Product", "", <InboxOutlined />, [
-    getItem("List", "/product/list"),
-    getItem("Category", "/product/category"),
+    getItem("List", "/admin/product/list"),
+    getItem("Category", "/admin/product/category"),
   ]),
-  getItem("Order", "/order", <FileOutlined />),
+  getItem("Order", "/admin/order", <FileOutlined />),
 ];
 
 const AdminPage: React.FC = () => {
@@ -82,7 +82,7 @@ const AdminPage: React.FC = () => {
                 type="text"
                 className="text-red-500"
                 onClick={() => {
-                  navigate("../login");
+                  navigate("../");
                 }}
               >
                 Sign Out

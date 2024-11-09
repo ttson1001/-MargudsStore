@@ -9,6 +9,7 @@ const ProductList = () => {
   const { category } = useParams();
   const [data, setData] = useState<any>([]);
   const [load, setLoad] = useState(false);
+  const [title, setTitle] = useState(null);
   const navigate = useNavigate();
   const handleClickCard = (value: number) => {
     navigate("../product/" + value);
@@ -20,6 +21,7 @@ const ProductList = () => {
         const response = await axios.get(
           API_SERVER + `api/category/GetCategory/` + category
         );
+        setTitle(response.data.data.name);
         setData(response.data.data.products); // Use the data field
         console.log(response.data.data.products);
       } catch (error) {
@@ -54,7 +56,7 @@ const ProductList = () => {
             margin: 0,
           }}
         >
-          {category}
+          {title}
         </h1>
       </div>
 
@@ -73,7 +75,7 @@ const ProductList = () => {
               cover={
                 <img
                   alt={product?.name}
-                  src={product?.imageProducts[0]}
+                  src={product?.imageProducts[0]?.image}
                   style={{
                     borderRadius: "10px 10px 0 0",
                     height: "200px",
@@ -87,7 +89,12 @@ const ProductList = () => {
                 description={
                   <div>
                     <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                      {product?.purchasePrice}
+                      {product?.purchasePrice
+                        ? new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(product.purchasePrice)
+                        : "N/A"}
                     </span>
                     <br />
                   </div>
