@@ -172,7 +172,7 @@ const ReportManagement: React.FC = () => {
           minHeight: "80vh",
         }}
       >
-        <p className="text-3xl font-bold">Category Management</p>
+        <p className="text-3xl font-bold">Report Management</p>
         <div className="flex justify-end">
           <Tooltip title="Add User">
             <Button
