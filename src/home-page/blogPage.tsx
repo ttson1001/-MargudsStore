@@ -4,15 +4,20 @@ import axios from "axios";
 import { API_SERVER } from "../api/admin-api";
 import logo from "../access/images/LogoEXE-01.png";
 
-const BlogFeed = () => {
+const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const response = await axios.get(API_SERVER + "api/Blog/GetAllBlogs");
+
         if (response.data) {
-          setBlogs(response.data.data); // Accessing the 'data' array
+          const activeBlogs = response.data.data.filter(
+            (blog: any) => blog.status
+          ); // Filter only active blogs
+          setBlogs(activeBlogs);
+          // Accessing the 'data' array
         }
       } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -55,4 +60,4 @@ const BlogFeed = () => {
   );
 };
 
-export default BlogFeed;
+export default BlogPage;

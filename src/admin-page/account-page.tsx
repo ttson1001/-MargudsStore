@@ -36,8 +36,6 @@ const AccountManagement: React.FC = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [form] = Form.useForm(); // Initialize form
 
-  const { confirm } = Modal;
-
   const showModal = () => {
     setIsModalOpen(true);
     setSelectedUser(null); // When adding a new user, no user should be selected

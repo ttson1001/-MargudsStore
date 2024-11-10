@@ -155,7 +155,7 @@ const ProductManagement: React.FC = () => {
         console.log(values);
         postProduct({ ...values, imageProducts, description });
         setIsLoad(true);
-        setIsModalOpen(false);
+        // setIsModalOpen(false);
       }
     });
   };

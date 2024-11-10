@@ -8,11 +8,13 @@ import {
   Tooltip,
   Form,
   Select,
+  message,
 } from "antd";
 import { PlusOutlined, EditOutlined, CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_SERVER } from "../api/admin-api";
+import useUserStore from "../api/store";
 
 interface BlogDataType {
   blogID: number;
@@ -23,7 +25,11 @@ interface BlogDataType {
   createAt: string;
   updateAt: string;
   status: boolean;
-  imageBlogs: string[];
+  imageBlogs: imageBlogs[];
+}
+
+interface imageBlogs {
+  image: string; // Each image product has an image URL
 }
 
 const BlogManagement: React.FC = () => {
@@ -58,18 +64,47 @@ const BlogManagement: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const user = useUserStore((state) => state.user);
+
   const handleOk = async () => {
     try {
       const formValues = await form.validateFields();
+
+      const imageString = formValues.imageBlogs
+        ? formValues.imageBlogs.split(";").map((url: string) => ({
+            image: url.trim(),
+          }))
+        : [];
+      console.log(selectedBlog);
       if (selectedBlog) {
         await axios.put(`/api/blog/${selectedBlog.blogID}`, formValues);
       } else {
-        await axios.post("/api/blog", formValues);
+        await axios.post(API_SERVER + "api/Blog/CreateBlog", {
+          accountID: user.userID,
+          title: formValues.title,
+          content: formValues.content,
+          author: formValues.author,
+          createAt: Date.now,
+          updateAt: Date.now,
+          status: formValues.status,
+          imageBlogs: imageString,
+        });
       }
       setIsLoad(true);
       setIsModalOpen(false);
     } catch (error) {
       console.log("Validation failed:", error);
+    }
+  };
+
+  const handleDelete = async (blogID: number) => {
+    try {
+      await axios.delete(`${API_SERVER}api/Blog/${blogID}`);
+      message.success("Blog deleted successfully");
+      setIsLoad(true);
+    } catch (error) {
+      console.log("Failed to delete blog:", error);
+      message.error("Failed to delete blog");
     }
   };
 
@@ -96,8 +131,10 @@ const BlogManagement: React.FC = () => {
       dataIndex: "imageBlogs",
       key: "imageBlogs",
       render: (images) =>
-        images.length > 0
-          ? images?.map((img: any) => <img src={img} alt="" width={50} />)
+        images && images.length > 0
+          ? images.map((img: any, index: number) => (
+              <img key={index} src={img.image} alt="Blog" width={50} />
+            ))
           : "No images",
     },
     {
@@ -108,7 +145,11 @@ const BlogManagement: React.FC = () => {
           <Button type="text" onClick={() => handleEdit(record)}>
             <EditOutlined />
           </Button>
-          <Button type="text">
+          <Button
+            type="text"
+            onClick={() => handleDelete(record.blogID)}
+            danger
+          >
             <CloseOutlined />
           </Button>
         </>

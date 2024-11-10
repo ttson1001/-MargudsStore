@@ -10,6 +10,7 @@ import type { MenuProps } from "antd";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import logo from "../access/images/LogoEXE-01.png";
+import useUserStore from "../api/store";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -49,6 +50,7 @@ const AdminPage: React.FC = () => {
   } = theme.useToken();
 
   const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
     navigate(e.key);
@@ -75,7 +77,7 @@ const AdminPage: React.FC = () => {
           <div style={{ height: 60 }} className="flex justify-between">
             <div className="flex items-center">
               <img style={{ height: "60px" }} src={logo} alt="" />
-              <span className="text-3xl font-bold">Wellcome TNTO</span>
+              <span className="text-3xl font-bold">Wellcome {user?.email}</span>
             </div>
 
             <div>

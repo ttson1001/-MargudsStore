@@ -25,6 +25,8 @@ import ChangePassword from "./home-page/changePassword";
 import NotFoundPage from "./home-page/NotFoundPage";
 import { Helmet } from "react-helmet";
 import BlogManagement from "./admin-page/blog-page";
+import BlogPage from "./home-page/blogPage";
+import BlogFeed from "./home-page/test.page";
 
 function App() {
   return (
@@ -37,7 +39,7 @@ function App() {
         <Route path="/" element={<Navigate to="/home/list" replace />} />
 
         {/* Các route khác */}
-        <Route path="/test" element={<Test />} />
+        <Route path="/test" element={<BlogFeed />} />
         <Route path="/verify" element={<InputCode />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -54,6 +56,7 @@ function App() {
           <Route path="change-password" element={<ChangePassword />} />
           <Route path="paymentSuccessPage" element={<PaymentSuccessPage />} />
           <Route path="about" element={<AboutContent />} />
+          <Route path="blog" element={<BlogPage />} />
         </Route>
 
         <Route path="/admin" element={<AdminPage />}>
