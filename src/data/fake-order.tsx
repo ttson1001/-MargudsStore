@@ -2,7 +2,7 @@ export const fakeOrder = [
   {
     orderID: 112,
     orderDate: "2024-11-08T22:04:26.2888637",
-    status: 0,
+    status: 1,
     total: 170000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -46,7 +46,7 @@ export const fakeOrder = [
   {
     orderID: 212,
     orderDate: "2024-11-08T22:04:26.2888637",
-    status: 0,
+    status: 1,
     total: 30000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -90,7 +90,7 @@ export const fakeOrder = [
   {
     orderID: 312,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 45000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -134,7 +134,7 @@ export const fakeOrder = [
   {
     orderID: 412,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 30000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -178,7 +178,7 @@ export const fakeOrder = [
   {
     orderID: 512,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 30000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -222,7 +222,7 @@ export const fakeOrder = [
   {
     orderID: 612,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 25000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -266,7 +266,7 @@ export const fakeOrder = [
   {
     orderID: 712,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 25000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -310,7 +310,7 @@ export const fakeOrder = [
   {
     orderID: 821,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 25000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -354,7 +354,7 @@ export const fakeOrder = [
   {
     orderID: 912,
     orderDate: "2024-11-08T22:04:26.2888637",
-    status: 0,
+    status: 1,
     total: 200000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -398,7 +398,7 @@ export const fakeOrder = [
   {
     orderID: 1012,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 90000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -442,7 +442,7 @@ export const fakeOrder = [
   {
     orderID: 1112,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 120000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -486,7 +486,7 @@ export const fakeOrder = [
   {
     orderID: 1212,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 70000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -530,7 +530,7 @@ export const fakeOrder = [
   {
     orderID: 1312,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 105000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -574,7 +574,7 @@ export const fakeOrder = [
   {
     orderID: 1124,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 150000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -618,7 +618,7 @@ export const fakeOrder = [
   {
     orderID: 1512,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 65000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -662,7 +662,7 @@ export const fakeOrder = [
   {
     orderID: 1126,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 50000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -706,7 +706,7 @@ export const fakeOrder = [
   {
     orderID: 1127,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 50000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -750,7 +750,7 @@ export const fakeOrder = [
   {
     orderID: 1812,
     orderDate: "2024-11-08T22:06:26.2888637",
-    status: 0,
+    status: 1,
     total: 70000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -794,7 +794,7 @@ export const fakeOrder = [
   {
     orderID: 1912,
     orderDate: "2024-11-08T22:04:26.2888637",
-    status: 0,
+    status: 1,
     total: 25000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
@@ -838,7 +838,7 @@ export const fakeOrder = [
   {
     orderID: 2012,
     orderDate: "2024-11-08T22:04:26.2888637",
-    status: 0,
+    status: 1,
     total: 100000.0,
     reportID: 0,
     accountID: "78b3d132-9ddf-414b-9d54-54d55c142671",
