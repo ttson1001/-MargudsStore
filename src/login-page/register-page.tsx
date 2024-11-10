@@ -98,7 +98,7 @@ const RegisterPage: React.FC = () => {
           </Form.Item>
         </Form>
         <div className="redirect-login">
-          <Link to="../">Already have an account? Log in</Link>
+          <Link to="../login">Already have an account? Log in</Link>
         </div>
       </div>
     </div>

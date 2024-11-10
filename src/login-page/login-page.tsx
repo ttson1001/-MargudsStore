@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
       return;
     }
     if (rs?.roles?.includes("Admin") || rs?.roles?.includes("Manager")) {
-      navigate("../dashboard");
+      navigate("../admin/dashboard");
       return;
     }
     if (rs.includes("confirm email")) navigate("../verify");

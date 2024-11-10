@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AdminPage from "./admin-page/admin-page";
 import AccountManagement from "./admin-page/account-page";
 import ProductManagement from "./admin-page/product-page";
@@ -24,6 +24,7 @@ import UserProfile from "./home-page/userProfile";
 import ChangePassword from "./home-page/changePassword";
 import NotFoundPage from "./home-page/NotFoundPage";
 import { Helmet } from "react-helmet";
+import BlogManagement from "./admin-page/blog-page";
 
 function App() {
   return (
@@ -33,14 +34,17 @@ function App() {
       </Helmet>
       <Routes>
         {/* Route gốc sẽ dẫn đến trang Login */}
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<Navigate to="/home/list" replace />} />
 
         {/* Các route khác */}
         <Route path="/test" element={<Test />} />
         <Route path="/verify" element={<InputCode />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         <Route path="/home" element={<HomeLayout />}>
+          <Route index element={<HomePage />} />{" "}
+          {/* This sets "list" as the default page */}
           <Route path="list" element={<HomePage />} />
           <Route path="list/:category" element={<ProductList />} />
           <Route path="product/:id" element={<ProductDetail />} />
@@ -59,6 +63,7 @@ function App() {
           <Route path="product/list" element={<ProductManagement />} />
           <Route path="product/category" element={<CategoryManagement />} />
           <Route path="order" element={<OrderManagement />} />
+          <Route path="blog" element={<BlogManagement />} />
         </Route>
 
         {/* Route mặc định cho trang 404 */}

@@ -39,6 +39,7 @@ const items: MenuItem[] = [
     getItem("Category", "/admin/product/category"),
   ]),
   getItem("Order", "/admin/order", <FileOutlined />),
+  getItem("Blog", "/admin/blog", <FileOutlined />),
 ];
 
 const AdminPage: React.FC = () => {
