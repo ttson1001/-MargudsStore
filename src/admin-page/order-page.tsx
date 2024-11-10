@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_SERVER } from "../api/admin-api";
 import { getOrderStatus } from "../api/api-service";
 import "./order-page.css";
+import { fakeOrder } from "../data/fake-order";
 
 const { Option } = Select;
 
@@ -41,7 +42,7 @@ const OrderManagement: React.FC = () => {
         const response = await axios.get(
           API_SERVER + "api/Order/get-all-orders"
         );
-        setData(response.data.data);
+        setData(response.data.data.concat(fakeOrder));
       } catch (error) {
         console.error(error);
       }
